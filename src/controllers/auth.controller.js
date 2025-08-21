@@ -54,14 +54,19 @@ async function getLoginController(req,res) {
 
 async function postLoginController(req,res) {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { identifier, password } = req.body;
+    if (!identifier || !password) {
       return res.status(400).json({
         message: "Missing Credentials",
       });
     }
 
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({
+        $or:[
+            {email:identifier},
+            {username:identifier}
+        ]
+    });
     if (!user) {
       return res.status(400).json({
         message: "User doesn't exists!",
@@ -75,7 +80,7 @@ async function postLoginController(req,res) {
         message: "Invalid password",
       });
     }
-    const token = jwt.sign({ email }, process.env.JWT_SECRET);
+    const token = jwt.sign({ email:user.email }, process.env.JWT_SECRET);
     res.cookie("token", token);
 
     return res.status(200).json({
