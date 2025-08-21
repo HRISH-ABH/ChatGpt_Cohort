@@ -1,0 +1,55 @@
+:root {
+    /* Colors */
+    --primary-color: #007bff;
+    --primary-hover: #0056b3;
+    
+    /* Light theme (default) */
+    --background-color: #ffffff;
+    --surface-color: #f8f9fa;
+    --text-color: #333333;
+    --text-secondary: #6c757d;
+    --input-background: #f8f9fa;
+    --input-border: #dee2e6;
+    --box-shadow: rgba(0, 0, 0, 0.1);
+    --divider-color: #e9ecef;
+}
+
+/* System dark theme preference */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --primary-color: #4dabf7;
+        --primary-hover: #339af0;
+        
+        --background-color: #1a1a1a;
+        --surface-color: #2d2d2d;
+        --text-color: #ffffff;
+        --text-secondary: #ced4da;
+        --input-background: #333333;
+        --input-border: #404040;
+        --box-shadow: rgba(255, 255, 255, 0.1);
+        --divider-color: #404040;
+    }
+}
+
+/* Manual dark theme override */
+[data-theme="dark"] {
+    --primary-color: #4dabf7;
+    --primary-hover: #339af0;
+    
+    --background-color: #1a1a1a;
+    --surface-color: #2d2d2d;
+    --text-color: #ffffff;
+    --text-secondary: #ced4da;
+    --input-background: #333333;
+    --input-border: #404040;
+    --box-shadow: rgba(255, 255, 255, 0.1);
+    --divider-color: #404040;
+}
+
+/* Theme transition */
+body {
+    transition: background-color 0.3s ease,
+                color 0.3s ease;
+}
+
+/* ...rest of your existing theme utils... */
