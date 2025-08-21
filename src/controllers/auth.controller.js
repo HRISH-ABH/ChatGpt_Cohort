@@ -31,7 +31,7 @@ async function postRegisterController(req, res) {
       password,
     });
 
-    const token =  jwt.sign({ email }, process.env.JWT_SECRET);
+    const token = jwt.sign({ email }, process.env.JWT_SECRET);
 
     res.cookie("token", token);
 
@@ -41,12 +41,54 @@ async function postRegisterController(req, res) {
       user,
     });
   } catch (error) {
-    console.log(error,error.message);
-    
+    console.log(error, error.message);
+
     return res.json({
       message: error.message,
     });
   }
 }
+async function getLoginController(req,res) {
+  return res.render("login");
+}
 
-export { getRegisterController, postRegisterController };
+async function postLoginController(req,res) {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Missing Credentials",
+      });
+    }
+
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "User doesn't exists!",
+      });
+    }
+
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        message: "Invalid password",
+      });
+    }
+    const token = jwt.sign({ email }, process.env.JWT_SECRET);
+    res.cookie("token", token);
+
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+}
+export { getRegisterController, postRegisterController ,getLoginController,postLoginController};
